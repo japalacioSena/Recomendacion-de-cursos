@@ -14,7 +14,7 @@ export default function Navbar() {
             <a href="/">Inicio</a>
             <a href="/cursos_activos">Cursos activos en Betowa</a>
             <a href="/seguimiento_cursos">Seguimiento de cursos</a>
-            <a href="">Selección de cursos de distribución</a>
+            <a href="/lista_distribucion">lista de distribución</a>
             <a href="/informacion_betowa">Información de interés Betowa</a>
           </div>
         </div>
