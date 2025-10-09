@@ -11,8 +11,8 @@ export default function Navbar() {
 
         <div className="flex w-full justify-center items-center gap-2">
           <div id="navbar" className="hidden sm:-my-px gap-3 sm:flex text-white">
-            <a href="/">Inicios</a>
-            <a href="">Cursos activos en Betowa</a>
+            <a href="/">Inicio</a>
+            <a href="/cursos_activos">Cursos activos en Betowa</a>
             <a href="">Selección cursos de seguimiento</a>
             <a href="">Selección de cursos de distribución</a>
             <a href="">Información de interés Betowa</a>
