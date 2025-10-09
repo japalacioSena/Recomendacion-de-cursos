@@ -13,9 +13,9 @@ export default function Navbar() {
           <div id="navbar" className="hidden sm:-my-px gap-3 sm:flex text-white">
             <a href="/">Inicio</a>
             <a href="/cursos_activos">Cursos activos en Betowa</a>
-            <a href="">Selección cursos de seguimiento</a>
+            <a href="/seguimiento_cursos">Seguimiento de cursos</a>
             <a href="">Selección de cursos de distribución</a>
-            <a href="">Información de interés Betowa</a>
+            <a href="/informacion_betowa">Información de interés Betowa</a>
           </div>
         </div>
 
