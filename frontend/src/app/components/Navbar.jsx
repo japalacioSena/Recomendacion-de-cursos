@@ -1,3 +1,15 @@
+"use client";
+
+import Link from "next/link";
+
+const links = [
+  { href: "/", name: "Inicio" },
+  { href: "/cursos_activos", name: "Cursos activos en Betowa" },
+  { href: "/seguimiento_cursos", name: "Seguimiento de cursos" },
+  { href: "/lista_distribucion", name: "Lista de distribución" },
+  { href: "/informacion_betowa", name: "Información de interés Betowa" },
+];
+
 export default function Navbar() {
   return (
     <div className="bg-alternate-background border-b border-gray-100 bg-gray-700">
@@ -10,12 +22,19 @@ export default function Navbar() {
         </div>
 
         <div className="flex w-full justify-center items-center gap-2">
-          <div id="navbar" className="hidden sm:-my-px gap-3 sm:flex text-white">
-            <a href="/">Inicio</a>
-            <a href="/cursos_activos">Cursos activos en Betowa</a>
-            <a href="/seguimiento_cursos">Seguimiento de cursos</a>
-            <a href="/lista_distribucion">lista de distribución</a>
-            <a href="/informacion_betowa">Información de interés Betowa</a>
+          <div
+            id="navbar"
+            className="hidden sm:-my-px gap-3 sm:flex text-white"
+          >
+            {links.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 hover:border-white hover:text-gray-300 focus:outline-none focus:border-white transition"
+              >
+                {link.name}
+              </Link>
+            ))}
           </div>
         </div>
 

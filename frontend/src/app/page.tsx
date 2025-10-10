@@ -1,11 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="p-6">
       <h1 className="mt-8 text-2xl font-medium text-gray-900">Inicio</h1>
       <div className="items-center  bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
-        <a
+        <Link
           href=""
           target="_blank"
           className="inline-flex items-center font-semibold text-indigo-700"
@@ -51,9 +52,9 @@ export default function Home() {
               </svg>
             </p>
           </div>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href=""
           className="inline-flex items-center font-semibold text-indigo-700"
         >
@@ -97,9 +98,9 @@ export default function Home() {
               </svg>
             </p>
           </div>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href=""
           className="inline-flex items-center font-semibold text-indigo-700"
         >
@@ -143,9 +144,9 @@ export default function Home() {
               </svg>
             </p>
           </div>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href=""
           className="inline-flex items-center font-semibold text-indigo-700"
         >
@@ -188,7 +189,7 @@ export default function Home() {
               </svg>
             </p>
           </div>
-        </a>
+        </Link>
       </div>
     </div>
   );
