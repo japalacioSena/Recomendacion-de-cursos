@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 
+// Definición del tipo Programa
 export interface Programa {
   codigo: string;
   nombre: string;
@@ -8,11 +9,12 @@ export interface Programa {
   fecha_apertura: string;
   fecha_cierre: string;
 }
-
+// Props para el componente TablaCursos
 interface TablaCursosProps {
   data: Programa[];
 }
 
+// Componente para mostrar la tabla de programas
 const TablaCursos: React.FC<TablaCursosProps> = ({ data }) => {
   if (data.length === 0) {
     return (
@@ -22,6 +24,7 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ data }) => {
     );
   }
 
+  // Renderizado de la tabla
   return (
     <div className="overflow-x-auto mt-6">
       <table className="min-w-full border border-gray-300 rounded-lg shadow-md">

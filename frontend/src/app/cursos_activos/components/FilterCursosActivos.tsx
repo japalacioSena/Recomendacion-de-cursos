@@ -55,11 +55,13 @@ const FilterCursosActivos: React.FC = () => {
     setFilteredData(filtered);
   }, [inputValue, selectedOption, data]);
 
+  // Manejar cambio en el select y limpiar input
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(e.target.value);
     setInputValue("");
   };
 
+  // Manejar cambio en el input de fecha
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
     if (!date) return;
@@ -71,6 +73,7 @@ const FilterCursosActivos: React.FC = () => {
   const isDateField =
     selectedOption === "fecha_apertura" || selectedOption === "fecha_cierre";
 
+  // Renderizado del componente
   return (
     <div className="w-full max-w-4xl mx-auto mt-10">
       <div className="flex flex-col md:flex-row items-center gap-2">

@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
 
+// Componente para gestionar la suscripción a la lista de distribución
 export default function ListaDistribucion() {
   const [suscrito, setSuscrito] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Manejar el toggle de suscripción
   const handleToggle = async () => {
     setLoading(true);
 
@@ -20,6 +22,7 @@ export default function ListaDistribucion() {
     );
   };
 
+  // Renderizado del componente
   return (
     <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-lg shadow-md w-full max-w-md mx-auto">
       <h2 className="text-xl font-bold">Notificaciones del Campus</h2>
@@ -29,6 +32,7 @@ export default function ListaDistribucion() {
           : "No estás suscrito actualmente."}
       </p>
 
+      {/*Botón de suscripción/darse de baja */}
       <button
         onClick={handleToggle}
         disabled={loading}
