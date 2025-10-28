@@ -1,5 +1,18 @@
 
 services:
+  db:
+    image: postgres:15-alpine
+    container_name: recomendaciones-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: recomendaciones
+      POSTGRES_PASSWORD: recomendaciones_postgres_589
+      POSTGRES_DB: recomendaciones_user_postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - recomendaciones_postgres_data:/var/lib/postgresql/data
+
   frontend:
     build:
       context: ./frontend
@@ -19,5 +32,20 @@ services:
     build:
       context: ./backend
     container_name: go_api
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: recomendaciones
+      DB_PASSWORD: recomendaciones_postgres_589
+      DB_NAME: recomendaciones_user_postgres
     ports:
       - "8080:8080"
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    command: ["go", "run", "main.go"]
+
+volumes:
+  recomendaciones_postgres_data:
