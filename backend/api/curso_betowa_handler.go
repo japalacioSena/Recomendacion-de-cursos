@@ -45,7 +45,7 @@ func GetCursoBetowa() ([]Curso, error) {
 	query := `SELECT PRF_CODIGO, TIPO_DE_FORMACION, PRF_DENOMINACION, NIVEL_DE_FORMACION,
 		PRF_DURACION_MAXIMA, PRF_DUR_ETAPA_LECTIVA, PRF_DUR_ETAPA_PROD, PRF_FCH_REGISTRO, Fecha_Activo,
 		PRF_DESCRIPCION_REQUISITO, PRF_CREDITOS, Linea_Tecnologica, Red_Tecnologica, Red_Conocimiento,
-		Modalidad, APUESTAS_PRIORITARIAS, Indice, Ocupacion FROM cursos`
+		Modalidad, apuestas_prioritarias, Indice, Ocupacion FROM cursos`
 
 	rows, err := connection.QueryContext(ctx, query)
 	if err != nil {

@@ -10,7 +10,7 @@ import (
 
 // ConnectExternal establece una conexión a una base de datos PostgreSQL de betowa
 func ConnectExternal() *sql.DB {
-	host := "localhost"
+	host := "host.docker.internal"
 	port := 5432
 	user := "postgres"
 	password := "12345"

@@ -22,15 +22,15 @@ func RunMigrations(db *sql.DB) {
 		)`,
 		`CREATE TABLE IF NOT EXISTS maximum_duration (
 			id SERIAL PRIMARY KEY,
-			duration DATE UNIQUE
+			duration INT UNIQUE
 		)`,
 		`CREATE TABLE IF NOT EXISTS duration_academic_stage (
 			id SERIAL PRIMARY KEY,
-			duration DATE UNIQUE
+			duration INT UNIQUE
 		)`,
 		`CREATE TABLE IF NOT EXISTS duration_production_stage (
 			id SERIAL PRIMARY KEY,
-			duration DATE UNIQUE
+			duration INT UNIQUE
 		)`,
 		`CREATE TABLE IF NOT EXISTS registration_date (
 			id SERIAL PRIMARY KEY,
