@@ -106,6 +106,7 @@ func insertCursoBetowa(ctx context.Context, db *sql.DB, c Curso) error {
 	}
 
 	// Insertar el curso con las foreign keys
+	fmt.Printf("🚀 Insertando curso: %+v\n", c)
 	_, err = db.ExecContext(ctx, `
 		INSERT INTO cursos (
 			course_code,
@@ -138,6 +139,7 @@ func insertCursoBetowa(ctx context.Context, db *sql.DB, c Curso) error {
 	)
 
 	if err != nil {
+		fmt.Printf("📥 Query ejecutada sin error, revisando si hizo INSERT...\n")
 		return fmt.Errorf("❌ error insertando curso %v: %v", c.PrfCodigo, err)
 	}
 
