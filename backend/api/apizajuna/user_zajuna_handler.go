@@ -1,7 +1,7 @@
-package api
+package apizajuna
 
 import (
-	"backend/db"
+	"backend/db/zajuna"
 	"context"
 	"database/sql"
 	"fmt"
@@ -11,29 +11,13 @@ import (
 
 // Estructura de los datos que vienen desde Betowa
 type Curso struct {
-	PrfCodigo            int
-	TipoDeFormacion      string
-	PrfDenominacion      string
-	NivelDeFormacion     string
-	PrfDuracionMaxima    int
-	PrfDurEtapaLectiva   int
-	PrfDurEtapaProd      int
-	PrfFchRegistro       string
-	FechaActivo          string
-	PrfDescripcionReq    string
-	PrfCreditos          int
-	LineaTecnologica     string
-	RedTecnologica       string
-	RedConocimiento      string
-	Modalidad            string
-	ApuestasPrioritarias string
-	Indice               string
-	Ocupacion            string
+	username int
+	fullname string
 }
 
 // GetCursoBetowa obtiene los cursos desde la base externa Betowa
-func GetCursoBetowa() ([]Curso, error) {
-	connection := GetCursoBetowaDBConnection()
+func GetUserZajuna() ([]Curso, error) {
+	connection := GetUserZajunaBConnection()
 	if connection == nil {
 		return nil, fmt.Errorf("no se pudo conectar a la base de datos externa")
 	}
@@ -53,9 +37,9 @@ func GetCursoBetowa() ([]Curso, error) {
 	}
 	defer rows.Close()
 
-	var cursos []Curso
+	var UserZajuna []UserZajuna
 	for rows.Next() {
-		var c Curso
+		var u UserZajuna
 		err := rows.Scan(
 			&c.PrfCodigo, &c.TipoDeFormacion, &c.PrfDenominacion, &c.NivelDeFormacion,
 			&c.PrfDuracionMaxima, &c.PrfDurEtapaLectiva, &c.PrfDurEtapaProd, &c.PrfFchRegistro,
@@ -79,5 +63,5 @@ func GetCursoBetowa() ([]Curso, error) {
 
 // Conexión a la base de datos Betowa
 func GetCursoBetowaDBConnection() *sql.DB {
-	return db.ConnectExternal()
+	return zajuna.ConnectExternal()
 }

@@ -1,4 +1,4 @@
-package db
+package betowa
 
 import (
 	"database/sql"
@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func RunMigrations(db *sql.DB) {
+func RunMigrations_betowa(db *sql.DB) {
 	tables := []string{
 		`CREATE TABLE IF NOT EXISTS type_of_training (
 			id SERIAL PRIMARY KEY,

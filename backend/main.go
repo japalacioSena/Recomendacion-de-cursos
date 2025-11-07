@@ -1,8 +1,9 @@
 package main
 
 import (
-	"backend/api"
+	"backend/api/apibetowa"
 	"backend/db"
+	"backend/db/betowa"
 	"fmt"
 	"log"
 	"time"
@@ -12,9 +13,9 @@ func main() {
 	connection := db.Connect()
 	defer connection.Close()
 
-	db.RunMigrations(connection)
+	betowa.RunMigrations_betowa(connection)
 
-	if err := api.ImportCursos(connection); err != nil {
+	if err := apibetowa.ImportCursos(connection); err != nil {
 		fmt.Println("❌ Error importando datos:", err)
 	}
 
@@ -24,7 +25,7 @@ func main() {
 	for {
 		log.Println("📥 Ejecutando importación desde Betowa...")
 		connection := db.Connect()
-		if err := api.ImportCursos(connection); err != nil {
+		if err := apibetowa.ImportCursos(connection); err != nil {
 			log.Println("❌ Error importando datos:", err)
 		} else {
 			log.Println("✅ Importación completada")

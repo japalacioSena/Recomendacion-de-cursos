@@ -1,6 +1,7 @@
-package api
+package apibetowa
 
 import (
+	"backend/api"
 	"context"
 	"database/sql"
 	"fmt"
@@ -11,7 +12,7 @@ func insertCursoBetowa(ctx context.Context, db *sql.DB, c Curso) error {
 	fmt.Printf("🧩 PrfDuracionMaxima = %v \n", db)
 	// Helper inline para reducir repetición
 	get := func(table, column string, value interface{}) (int, error) {
-		id, err := GetOrCreateID(ctx, db, table, column, value)
+		id, err := api.GetOrCreateID(ctx, db, table, column, value)
 		if err != nil {
 			return 0, fmt.Errorf("error en %s.%s (valor=%v) para curso %v: %v", table, column, value, c.PrfCodigo, err)
 		}
@@ -106,7 +107,6 @@ func insertCursoBetowa(ctx context.Context, db *sql.DB, c Curso) error {
 	}
 
 	// Insertar el curso con las foreign keys
-	fmt.Printf("🚀 Insertando curso: %+v\n", c)
 	_, err = db.ExecContext(ctx, `
 		INSERT INTO cursos (
 			course_code,
@@ -139,7 +139,6 @@ func insertCursoBetowa(ctx context.Context, db *sql.DB, c Curso) error {
 	)
 
 	if err != nil {
-		fmt.Printf("📥 Query ejecutada sin error, revisando si hizo INSERT...\n")
 		return fmt.Errorf("❌ error insertando curso %v: %v", c.PrfCodigo, err)
 	}
 

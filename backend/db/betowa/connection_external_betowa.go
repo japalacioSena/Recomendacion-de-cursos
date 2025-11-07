@@ -1,4 +1,4 @@
-package db
+package betowa
 
 import (
 	"database/sql"
