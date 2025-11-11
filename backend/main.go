@@ -4,6 +4,7 @@ import (
 	"backend/api/apibetowa"
 	"backend/db"
 	"backend/db/betowa"
+	"backend/db/zajuna"
 	"fmt"
 	"log"
 	"time"
@@ -14,6 +15,7 @@ func main() {
 	defer connection.Close()
 
 	betowa.RunMigrations_betowa(connection)
+	zajuna.RunMigrations_zajuna(connection)
 
 	if err := apibetowa.ImportCursos(connection); err != nil {
 		fmt.Println("❌ Error importando datos:", err)

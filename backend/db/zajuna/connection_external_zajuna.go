@@ -9,7 +9,7 @@ import (
 )
 
 // ConnectExternal establece una conexión a una base de datos PostgreSQL de betowa
-func ConnectExternal() *sql.DB {
+func ConnectExternalZajuna() *sql.DB {
 	host := "192.168.1.122"
 	port := 5432
 	user := "postgres"

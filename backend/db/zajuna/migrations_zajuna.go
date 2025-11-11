@@ -2,36 +2,32 @@ package zajuna
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 )
 
-func RunMigrations_betowa(db *sql.DB) {
+func RunMigrations_zajuna(db *sql.DB) {
 	tables := []string{
-		`CREATE TABLE IF NOT EXISTS user (
+		`CREATE TABLE IF NOT EXISTS "user" (
 			id SERIAL PRIMARY KEY,
-			code INT UNIQUE
+			username INT UNIQUE,
+			idnumber INT UNIQUE, 
+			firstname TEXT,
+			lastname TEXT
 		)`,
-		`CREATE TABLE IF NOT EXISTS mailing _list_course (
+		`CREATE TABLE IF NOT EXISTS course_tracking (
 			id SERIAL PRIMARY KEY,
-			name TEXT UNIQUE
-		)`,
-		`CREATE TABLE IF NOT EXISTS course_users (
-			id SERIAL PRIMARY KEY,
-			id_course INT,
 			id_user INT,
-			foreign key (id_course) references mailing_list_course(id),
-			foreign key (id_user) references user(id)
+			id_technological_red INT,
+			FOREIGN KEY (id_user) REFERENCES "user"(id),
+			FOREIGN KEY (id_technological_red) REFERENCES technological_red(id)
 		)`,
 	}
 
-	for _, query := range tables {
-		_, err := db.Exec(query)
-		if err != nil {
-			log.Fatalf("❌ Error en migración:\n%v\nQuery: %s\n", err, query)
+	for _, table := range tables {
+		if _, err := db.Exec(table); err != nil {
+			log.Fatalf("❌ Error creando tabla: %v", err)
 		}
 	}
 
-	fmt.Println("✅ Migraciones completadas correctamente.")
-
+	log.Println("✅ Migraciones Zajuna ejecutadas correctamente")
 }
