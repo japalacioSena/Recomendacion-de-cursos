@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func ImportCursos(localDB *sql.DB) error {
+func ImportUsers(localDB *sql.DB) error {
 	fmt.Println("📥 Importando usuarios desde base externa...")
 
 	userZajuna, err := GetUserZajuna()

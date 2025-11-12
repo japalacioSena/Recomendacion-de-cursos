@@ -11,8 +11,8 @@ import (
 
 // Estructura de los datos que vienen desde Betowa
 type UserZajuna struct {
-	Username  int
-	Idnumber  int
+	Username  string
+	Idnumber  string
 	Firstname string
 	Lastname  string
 }

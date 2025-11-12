@@ -9,8 +9,8 @@ func RunMigrations_zajuna(db *sql.DB) {
 	tables := []string{
 		`CREATE TABLE IF NOT EXISTS "user" (
 			id SERIAL PRIMARY KEY,
-			username INT UNIQUE,
-			idnumber INT UNIQUE, 
+			username TEXT UNIQUE,
+			idnumber tEXT UNIQUE, 
 			firstname TEXT,
 			lastname TEXT
 		)`,
