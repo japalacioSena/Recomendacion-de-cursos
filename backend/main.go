@@ -6,8 +6,10 @@ import (
 	"backend/db"
 	"backend/db/betowa"
 	"backend/db/zajuna"
+	"backend/utils"
 	"fmt"
 	"log"
+	"net/http"
 	"time"
 )
 
@@ -18,10 +20,19 @@ func main() {
 	betowa.RunMigrations_betowa(connection)
 	zajuna.RunMigrations_zajuna(connection)
 
+	// Rutas del API
+	http.HandleFunc("/api/user_zajuna", utils.EnableCORS(apizajuna.GetFixedUserHandler))
+
+	fmt.Println("🚀 Servidor corriendo en puerto 8080")
+	go func() {
+		log.Fatal(http.ListenAndServe(":8080", nil))
+	}()
+
 	if err := apibetowa.ImportCursos(connection); err != nil {
 		fmt.Println("❌ Error importando datos:", err)
 	}
 
+	// Tareas programadas
 	ticker := time.NewTicker(1 * time.Minute)
 	defer ticker.Stop()
 
@@ -49,5 +60,4 @@ func main() {
 		// Espera hasta la próxima iteración
 		<-ticker.C
 	}
-
 }

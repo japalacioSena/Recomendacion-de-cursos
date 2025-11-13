@@ -7,7 +7,7 @@ import (
 
 func RunMigrations_zajuna(db *sql.DB) {
 	tables := []string{
-		`CREATE TABLE IF NOT EXISTS "user" (
+		`CREATE TABLE IF NOT EXISTS user_zajuna (
 			id SERIAL PRIMARY KEY,
 			username TEXT UNIQUE,
 			idnumber tEXT UNIQUE, 
@@ -18,7 +18,7 @@ func RunMigrations_zajuna(db *sql.DB) {
 			id SERIAL PRIMARY KEY,
 			id_user INT,
 			id_technological_red INT,
-			FOREIGN KEY (id_user) REFERENCES "user"(id),
+			FOREIGN KEY (id_user) REFERENCES user_zajuna(id),
 			FOREIGN KEY (id_technological_red) REFERENCES technological_red(id)
 		)`,
 	}

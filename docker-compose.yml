@@ -1,68 +1,66 @@
-services:
-  db:
-    image: postgres:15-alpine
-    container_name: recomendaciones-postgres
-    restart: always
-    environment:
-      POSTGRES_USER: recomendaciones
-      POSTGRES_PASSWORD: recomendaciones_postgres_589
-      POSTGRES_DB: recomendaciones_user_postgres
-    ports:
-      - "5435:5432" # Puerto local 5435 → Puerto interno 5432
-    volumes:
-      - recomendaciones_postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U recomendaciones -d recomendaciones_user_postgres"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-    networks:
-      - app-network
+  services:
+    db:
+      image: postgres:15-alpine
+      container_name: recomendaciones-postgres
+      restart: always
+      environment:
+        POSTGRES_USER: recomendaciones
+        POSTGRES_PASSWORD: recomendaciones_postgres_589
+        POSTGRES_DB: recomendaciones_user_postgres
+      ports:
+        - "5435:5432"
+      volumes:
+        - recomendaciones_postgres_data:/var/lib/postgresql/data
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U recomendaciones -d recomendaciones_user_postgres"]
+        interval: 5s
+        timeout: 3s
+        retries: 5
+      networks:
+        - app-network
 
-  backend:
-    build:
-      context: ./backend
-    container_name: go_api
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: recomendaciones
-      DB_PASSWORD: recomendaciones_postgres_589
-      DB_NAME: recomendaciones_user_postgres
-    ports:
-      - "8080:8080"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ./backend:/app
-    working_dir: /app
-    command: ["go", "run", "main.go"]
-    networks:
-      - app-network
+    backend:
+      build:
+        context: ./backend
+      container_name: backend_api
+      depends_on:
+        db:
+          condition: service_healthy
+      environment:
+        DB_HOST: db
+        DB_PORT: 5432
+        DB_USER: recomendaciones
+        DB_PASSWORD: recomendaciones_postgres_589
+        DB_NAME: recomendaciones_user_postgres
+      ports:
+        - "8080:8080"
+      volumes:
+        - ./backend:/app
+      working_dir: /app
+      command: ["go", "run", "main.go"]
+      networks:
+        - app-network
 
-  frontend:
-    build:
-      context: ./frontend
-    container_name: nextjs_app
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://backend:8080
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    command: npm run dev
-    depends_on:
-      - backend
-    networks:
-      - app-network
+    frontend:
+      build:
+        context: ./frontend
+      container_name: nextjs_app
+      ports:
+        - "3000:3000"
+      environment:
+        - NEXT_PUBLIC_API_URL=http://localhost:8080
+      volumes:
+        - ./frontend:/app
+        - /app/node_modules
+      command: npm run dev
+      depends_on:
+        - backend
+      networks:
+        - app-network
 
-networks:
-  app-network:
-    driver: bridge
+  networks:
+    app-network:
+      driver: bridge
 
-volumes:
-  recomendaciones_postgres_data:
+  volumes:
+    recomendaciones_postgres_data:

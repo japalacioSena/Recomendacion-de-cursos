@@ -12,7 +12,7 @@ func insertUserZajuna(ctx context.Context, db *sql.DB, u UserZajuna) error {
 
 	// Insertar los datos de los usuarios
 	_, err := db.ExecContext(ctx, `
-	INSERT INTO "user" (username, idnumber, firstname, lastname)
+	INSERT INTO user_zajuna (username, idnumber, firstname, lastname)
 	VALUES ($1, $2, $3, $4)
 	ON CONFLICT (username) DO UPDATE 
 	SET idnumber = EXCLUDED.idnumber,
