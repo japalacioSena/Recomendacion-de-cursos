@@ -1,4 +1,4 @@
-package apizajuna
+package query
 
 import (
 	"backend/db"

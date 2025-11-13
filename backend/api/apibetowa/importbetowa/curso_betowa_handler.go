@@ -1,4 +1,4 @@
-package apibetowa
+package importbetowa
 
 import (
 	"backend/db/betowa"

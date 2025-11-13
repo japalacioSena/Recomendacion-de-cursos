@@ -1,4 +1,4 @@
-package apizajuna
+package importzajuna
 
 import (
 	"context"

@@ -1,8 +1,9 @@
 package main
 
 import (
-	"backend/api/apibetowa"
-	"backend/api/apizajuna"
+	"backend/api/apibetowa/importbetowa"
+	"backend/api/apizajuna/importzajuna"
+	"backend/api/query"
 	"backend/db"
 	"backend/db/betowa"
 	"backend/db/zajuna"
@@ -21,14 +22,14 @@ func main() {
 	zajuna.RunMigrations_zajuna(connection)
 
 	// Rutas del API
-	http.HandleFunc("/api/user_zajuna", utils.EnableCORS(apizajuna.GetFixedUserHandler))
+	http.HandleFunc("/api/user_zajuna", utils.EnableCORS(query.GetFixedUserHandler))
 
 	fmt.Println("🚀 Servidor corriendo en puerto 8080")
 	go func() {
 		log.Fatal(http.ListenAndServe(":8080", nil))
 	}()
 
-	if err := apibetowa.ImportCursos(connection); err != nil {
+	if err := importbetowa.ImportCursos(connection); err != nil {
 		fmt.Println("❌ Error importando datos:", err)
 	}
 
@@ -40,7 +41,7 @@ func main() {
 		// Importar desde Betowa
 		log.Println("📥 Ejecutando importación desde Betowa...")
 		connection := db.Connect()
-		if err := apibetowa.ImportCursos(connection); err != nil {
+		if err := importbetowa.ImportCursos(connection); err != nil {
 			log.Println("❌ Error importando datos:", err)
 		} else {
 			log.Println("✅ Importación completada Betowa")
@@ -50,7 +51,7 @@ func main() {
 		// Importar desde Zajuna
 		log.Println("📥 Ejecutando importación desde Zajuna...")
 		connection = db.Connect()
-		if err := apizajuna.ImportUsers(connection); err != nil {
+		if err := importzajuna.ImportUsers(connection); err != nil {
 			log.Println("❌ Error importando datos Zajuna:", err)
 		} else {
 			log.Println("✅ Importación completada Zajuna")

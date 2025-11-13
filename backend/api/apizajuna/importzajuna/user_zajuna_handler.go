@@ -1,4 +1,4 @@
-package apizajuna
+package importzajuna
 
 import (
 	"backend/db/zajuna"

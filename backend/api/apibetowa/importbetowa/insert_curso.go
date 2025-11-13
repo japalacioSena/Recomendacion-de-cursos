@@ -1,7 +1,6 @@
-package apibetowa
+package importbetowa
 
 import (
-	"backend/api"
 	"context"
 	"database/sql"
 	"fmt"
@@ -12,7 +11,7 @@ func insertCursoBetowa(ctx context.Context, db *sql.DB, c Curso) error {
 	fmt.Printf("🧩 PrfDuracionMaxima = %v \n", db)
 	// Helper inline para reducir repetición
 	get := func(table, column string, value interface{}) (int, error) {
-		id, err := api.GetOrCreateID(ctx, db, table, column, value)
+		id, err := GetOrCreateID(ctx, db, table, column, value)
 		if err != nil {
 			return 0, fmt.Errorf("error en %s.%s (valor=%v) para curso %v: %v", table, column, value, c.PrfCodigo, err)
 		}
