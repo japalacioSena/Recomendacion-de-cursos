@@ -22,7 +22,10 @@ func main() {
 	zajuna.RunMigrations_zajuna(connection)
 
 	// Rutas del API
+	// Endpoint para usuario "quemado" con CORS habilitado
 	http.HandleFunc("/api/user_zajuna", utils.EnableCORS(query.GetFixedUserHandler))
+	// Endpoint para redes tecnológicas con CORS habilitado
+	http.HandleFunc("/api/technological_reds", utils.EnableCORS(query.GetTechnologicalRedHandler))
 
 	fmt.Println("🚀 Servidor corriendo en puerto 8080")
 	go func() {

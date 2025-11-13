@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // ✅ Import correcto
+import { usePathname } from "next/navigation";
 import { getUser } from "@/utils/api";
 
 const links = [

@@ -4,8 +4,8 @@ export async function getUser() {
   return res.json();
 }
 
-// export async function getCursosActivos() {
-//   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cursos_activos`);
-//   if (!res.ok) throw new Error("Error obteniendo cursos activos");
-//   return res.json();
-// }
+export async function getTechnologicalRed() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/technological_reds`);
+  if (!res.ok) throw new Error("Error obteniendo redes tecnológicas");
+  return res.json();
+}

@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { getTechnologicalRed } from "@/utils/api";
+
 
 type Interes = {
   id: number;
@@ -8,30 +10,43 @@ type Interes = {
 };
 
 export default function TablaSeguimiento() {
-  // 🔹 Datos quemados simulando respuesta de un backend Go
-  const intereses: Interes[] = [
-    { id: 1, nombre: "Cocina" },
-    { id: 2, nombre: "Base de Datos" },
-    { id: 3, nombre: "Inglés" },
-    { id: 4, nombre: "Videojuegos" },
-    { id: 5, nombre: "Programación" },
-    { id: 6, nombre: "Diseño Gráfico" },
-    { id: 7, nombre: "Matemáticas" },
-    { id: 8, nombre: "Historia" },
-    { id: 9, nombre: "Física" },
-  ];
+  // 🔹 Estado para los datos del backend
+  const [intereses, setIntereses] = useState<Interes[]>([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // 🔹 Estado para filtro y checkboxes seleccionados
+  // 🔹 Estado para búsqueda y selección
   const [busqueda, setBusqueda] = useState("");
   const [seleccionados, setSeleccionados] = useState<number[]>([]);
   const [guardando, setGuardando] = useState(false);
 
-  // 🔹 Filtrar según búsqueda (insensible a mayúsculas)
+  // 🔹 Cargar datos al montar el componente
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getTechnologicalRed();
+        // 🔸 Ajustar nombres del backend (Go usa "name")
+        const mapped = data.map((item: any) => ({
+          id: item.id,
+          nombre: item.name,
+        }));
+        setIntereses(mapped);
+      } catch (err) {
+        console.error(err);
+        setError("No se pudieron obtener las redes tecnológicas");
+      } finally {
+        setCargando(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  // 🔹 Filtrar según búsqueda
   const resultados = useMemo(() => {
     return intereses.filter((item) =>
       item.nombre.toLowerCase().includes(busqueda.toLowerCase())
     );
-  }, [busqueda]);
+  }, [busqueda, intereses]);
 
   // 🔹 Alternar selección
   const toggleSeleccion = (id: number) => {
@@ -45,36 +60,30 @@ export default function TablaSeguimiento() {
   for (let i = 0; i < resultados.length; i += 3) {
     filas.push(resultados.slice(i, i + 3));
   }
-   // 🔹 Guardar selección (por ahora muestra en consola)
+
+  // 🔹 Guardar selección
   const handleGuardar = async () => {
     setGuardando(true);
-
-    // Simulamos envío al backend Go
     const seleccionadosData = intereses.filter((i) =>
       seleccionados.includes(i.id)
     );
 
-    console.log("Datos a guardar:", seleccionadosData);
+    console.log("📦 Datos a guardar:", seleccionadosData);
 
-    // Ejemplo de cómo será con backend Go:
-    /*
-    await fetch("http://localhost:8080/api/intereses/guardar", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(seleccionadosData),
-    });
-    */
-
-    // Simulamos retardo
+    // Aquí podrías hacer un POST al backend si quisieras guardar
     await new Promise((r) => setTimeout(r, 1000));
+
     setGuardando(false);
     alert("¡Intereses guardados correctamente!");
   };
 
-  
+  // 🔹 Mostrar estados
+  if (cargando) return <p className="p-4">Cargando redes tecnológicas...</p>;
+  if (error) return <p className="p-4 text-red-500">{error}</p>;
+
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Tabla de Intereses</h2>
+      <h2 className="text-2xl font-bold mb-4">Redes Tecnológicas</h2>
 
       {/* 🔍 Campo de búsqueda */}
       <input
@@ -103,7 +112,6 @@ export default function TablaSeguimiento() {
                   </label>
                 </td>
               ))}
-              {/* Si la última fila no tiene 3 celdas, completar vacíos */}
               {fila.length < 3 &&
                 Array.from({ length: 3 - fila.length }).map((_, i) => (
                   <td key={`vacio-${i}`} className="p-4 border-r"></td>
