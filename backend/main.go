@@ -3,6 +3,7 @@ package main
 import (
 	"backend/api/apibetowa/importbetowa"
 	"backend/api/apizajuna/importzajuna"
+	"backend/api/apizajuna/savecursos"
 	"backend/api/query"
 	"backend/db"
 	"backend/db/betowa"
@@ -26,6 +27,9 @@ func main() {
 	http.HandleFunc("/api/user_zajuna", utils.EnableCORS(query.GetFixedUserHandler))
 	// Endpoint para redes tecnológicas con CORS habilitado
 	http.HandleFunc("/api/technological_reds", utils.EnableCORS(query.GetTechnologicalRedHandler))
+
+	// Endpoint para guardar selección tecnológica con CORS habilitado
+	http.HandleFunc("/guardar-seleccion", utils.EnableCORS(savecursos.SaveTechnologicalSelectionHandler))
 
 	fmt.Println("🚀 Servidor corriendo en puerto 8080")
 	go func() {

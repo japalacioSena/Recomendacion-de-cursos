@@ -3,57 +3,63 @@ package query
 import (
 	"backend/db"
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
 // Estructura de respuesta (exportada con mayúsculas)
 type TechnologicalRedResponse struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	Selected bool   `json:"selected"`
 }
 
 // Handler para consultar la red tecnológica
 func GetTechnologicalRedHandler(w http.ResponseWriter, r *http.Request) {
-	// Conectar a la base de datos
 	connection := db.Connect()
 	defer connection.Close()
 
-	// Ejecutar la consulta
-	query := `SELECT id, name FROM technological_red ORDER BY name`
+	// Leer id_user desde ?id_user=#
+	idUser := r.URL.Query().Get("id_user")
+	if idUser == "" {
+		http.Error(w, "Falta el parámetro id_user", http.StatusBadRequest)
+		return
+	}
 
-	rows, err := connection.Query(query)
+	query := `
+		SELECT tr.id, tr.name,
+		CASE WHEN ct.id_technological_red IS NULL THEN false ELSE true END AS selected
+		FROM technological_red tr
+		LEFT JOIN course_tracking ct 
+			ON tr.id = ct.id_technological_red 
+			AND ct.id_user = $1
+		ORDER BY tr.name
+	`
+
+	rows, err := connection.Query(query, idUser)
 	if err != nil {
 		http.Error(w, "Error ejecutando la consulta", http.StatusInternalServerError)
-		log.Println("❌ Error ejecutando la consulta:", err)
 		return
 	}
 	defer rows.Close()
 
-	// Crear slice para almacenar los resultados
-	var redes []TechnologicalRedResponse
+	type Response struct {
+		ID       int    `json:"id"`
+		Name     string `json:"name"`
+		Selected bool   `json:"selected"`
+	}
+
+	var redes []Response
 
 	for rows.Next() {
-		var red TechnologicalRedResponse
-		if err := rows.Scan(&red.ID, &red.Name); err != nil {
-			http.Error(w, "Error leyendo los datos", http.StatusInternalServerError)
-			log.Println("❌ Error leyendo fila:", err)
+		var r Response
+		err := rows.Scan(&r.ID, &r.Name, &r.Selected)
+		if err != nil {
+			http.Error(w, "Error leyendo datos", http.StatusInternalServerError)
 			return
 		}
-		redes = append(redes, red)
+		redes = append(redes, r)
 	}
 
-	// Verificar si no se obtuvieron resultados
-	if len(redes) == 0 {
-		http.Error(w, "No se encontraron redes tecnológicas", http.StatusNotFound)
-		return
-	}
-
-	// Devolver respuesta en formato JSON
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(redes); err != nil {
-		http.Error(w, "Error generando la respuesta JSON", http.StatusInternalServerError)
-		log.Println("❌ Error codificando JSON:", err)
-	}
+	json.NewEncoder(w).Encode(redes)
 }

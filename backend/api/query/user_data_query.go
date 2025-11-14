@@ -9,6 +9,7 @@ import (
 
 // Estructura de respuesta
 type UserResponse struct {
+	Id_user   int    `json:"id"`
 	Firstname string `json:"firstname"`
 	Lastname  string `json:"lastname"`
 }
@@ -19,11 +20,12 @@ func GetFixedUserHandler(w http.ResponseWriter, r *http.Request) {
 	defer connection.Close()
 
 	username := "29873380" // 🔥 Usuario quemado
+	//username := "1000322766cc"
 
 	var user UserResponse
-	query := `SELECT firstname, lastname FROM user_zajuna WHERE username = $1 LIMIT 1`
+	query := `SELECT id, firstname, lastname FROM user_zajuna WHERE username = $1 LIMIT 1`
 
-	err := connection.QueryRow(query, username).Scan(&user.Firstname, &user.Lastname)
+	err := connection.QueryRow(query, username).Scan(&user.Id_user, &user.Firstname, &user.Lastname)
 	if err != nil {
 		http.Error(w, "Usuario no encontrado o error en la consulta", http.StatusNotFound)
 		log.Println("❌ Error consultando usuario:", err)

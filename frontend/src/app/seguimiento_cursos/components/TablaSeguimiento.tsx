@@ -1,36 +1,52 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { getTechnologicalRed } from "@/utils/api";
-
+import {
+  getTechnologicalRed,
+  SaveTechnologicalSelectionHandler,
+  getUser,
+} from "@/utils/api";
 
 type Interes = {
   id: number;
   nombre: string;
+  selected: boolean; // ← agregado
 };
 
 export default function TablaSeguimiento() {
-  // 🔹 Estado para los datos del backend
   const [intereses, setIntereses] = useState<Interes[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // 🔹 Estado para búsqueda y selección
   const [busqueda, setBusqueda] = useState("");
   const [seleccionados, setSeleccionados] = useState<number[]>([]);
   const [guardando, setGuardando] = useState(false);
 
-  // 🔹 Cargar datos al montar el componente
+  // -----------------------------------------------------
+  // 🔹 Cargar usuario + redes tecnológicas (dinámico)
+  // -----------------------------------------------------
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await getTechnologicalRed();
-        // 🔸 Ajustar nombres del backend (Go usa "name")
-        const mapped = data.map((item: any) => ({
+        // 1️⃣ Obtener usuario
+        const usuario = await getUser();
+
+        // 2️⃣ Obtener redes pasando el ID
+        const data = await getTechnologicalRed(usuario.id);
+
+        // 3️⃣ Transformar datos y asignar tipo Interes
+        const mapped: Interes[] = data.map((item: any) => ({
           id: item.id,
           nombre: item.name,
+          selected: item.selected ?? false,
         }));
+
         setIntereses(mapped);
+
+        // 4️⃣ Preseleccionar los checkboxes marcados desde backend
+        const pre = mapped.filter(i => i.selected).map(i => i.id);
+        setSeleccionados(pre);
+
       } catch (err) {
         console.error(err);
         setError("No se pudieron obtener las redes tecnológicas");
@@ -38,46 +54,64 @@ export default function TablaSeguimiento() {
         setCargando(false);
       }
     }
+
     fetchData();
   }, []);
 
-  // 🔹 Filtrar según búsqueda
+  // -----------------------------------------------------
+  // 🔎 Filtrado de búsqueda
+  // -----------------------------------------------------
   const resultados = useMemo(() => {
     return intereses.filter((item) =>
       item.nombre.toLowerCase().includes(busqueda.toLowerCase())
     );
   }, [busqueda, intereses]);
 
-  // 🔹 Alternar selección
+  // -----------------------------------------------------
+  // 🔘 Alternar selección
+  // -----------------------------------------------------
   const toggleSeleccion = (id: number) => {
     setSeleccionados((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
   };
 
-  // 🔹 Dividir resultados en filas de 3 columnas
+  // -----------------------------------------------------
+  // 🧩 Dividir en filas de 3 columnas
+  // -----------------------------------------------------
   const filas = [];
   for (let i = 0; i < resultados.length; i += 3) {
     filas.push(resultados.slice(i, i + 3));
   }
 
-  // 🔹 Guardar selección
+  // -----------------------------------------------------
+  // 💾 Guardar selección
+  // -----------------------------------------------------
   const handleGuardar = async () => {
     setGuardando(true);
-    const seleccionadosData = intereses.filter((i) =>
-      seleccionados.includes(i.id)
-    );
 
-    console.log("📦 Datos a guardar:", seleccionadosData);
+    try {
+      const usuario = await getUser();
 
-    // Aquí podrías hacer un POST al backend si quisieras guardar
-    await new Promise((r) => setTimeout(r, 1000));
+      const resp = await SaveTechnologicalSelectionHandler(
+        usuario.id,
+        seleccionados
+      );
+
+      console.log(resp);
+      alert("¡Intereses guardados / actualizados!");
+    } catch (err) {
+      console.error(err);
+      alert("Error guardando datos");
+    }
 
     setGuardando(false);
-    alert("¡Intereses guardados correctamente!");
   };
 
-  // 🔹 Mostrar estados
+  // -----------------------------------------------------
+  // UI (render)
+  // -----------------------------------------------------
+
   if (cargando) return <p className="p-4">Cargando redes tecnológicas...</p>;
   if (error) return <p className="p-4 text-red-500">{error}</p>;
 
@@ -127,9 +161,7 @@ export default function TablaSeguimiento() {
         <p>
           {seleccionados.length > 0
             ? seleccionados
-                .map(
-                  (id) => intereses.find((interes) => interes.id === id)?.nombre
-                )
+                .map((id) => intereses.find((interes) => interes.id === id)?.nombre)
                 .join(", ")
             : "Ninguno"}
         </p>
