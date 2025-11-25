@@ -2,7 +2,9 @@ package query
 
 import (
 	"backend/db"
+	"backend/utils"
 	"encoding/json"
+	"errors"
 	"net/http"
 )
 
@@ -18,11 +20,21 @@ func GetTechnologicalRedHandler(w http.ResponseWriter, r *http.Request) {
 	connection := db.Connect()
 	defer connection.Close()
 
-	// Leer id_user desde ?id_user=#
-	idUser := r.URL.Query().Get("id_user")
-	if idUser == "" {
-		http.Error(w, "Falta el parámetro id_user", http.StatusBadRequest)
-		return
+	idUser, err := utils.GetUserIDFromRequest(r)
+
+	if err != nil {
+		// Asume un estado 400 (Bad Request) para errores de validación de entrada
+		statusCode := http.StatusBadRequest
+
+		// Opcional: Podrías diferenciar errores, pero 400 es adecuado para ambos casos.
+		if errors.Is(err, utils.ErrMissingUserParameter) {
+			// Este es un ejemplo para ser explícito, pero usa el mensaje de error.
+		} else if errors.Is(err, utils.ErrInvalidUserParameter) {
+			// ...
+		}
+
+		http.Error(w, err.Error(), statusCode)
+		return // ¡Detiene la ejecución si hay un error!
 	}
 
 	query := `
@@ -36,6 +48,7 @@ func GetTechnologicalRedHandler(w http.ResponseWriter, r *http.Request) {
 	`
 
 	rows, err := connection.Query(query, idUser)
+
 	if err != nil {
 		http.Error(w, "Error ejecutando la consulta", http.StatusInternalServerError)
 		return

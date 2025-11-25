@@ -32,3 +32,13 @@ export async function SaveTechnologicalSelectionHandler(userId, redIds) {
 
   return await res.text();
 }
+
+// Obtiene los cursos recomendados
+export async function getRecommendedCourses(userId) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/index_cursos?user_id=${userId}`
+  );
+
+  if (!res.ok) throw new Error("Error obteniendo cursos recomendados");
+  return res.json();
+}

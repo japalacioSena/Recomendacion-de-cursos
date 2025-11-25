@@ -1,14 +1,22 @@
 "use client";
 import React from "react";
 
-// Definición del tipo Programa
+// La estructura de la data que recibes del backend de Go
 export interface Programa {
-  codigo: string;
-  nombre: string;
-  estado: string;
-  fecha_apertura: string;
-  fecha_cierre: string;
+  // Ahora corresponde a los campos JSON del backend de Go:
+  // co.course_code -> ID (int)
+  id: number; 
+  // de.name -> name (string)
+  name: string;
+  // ad.date -> active_date (string)
+  active_date: string;       // Fecha de Actividad / Cierre
+  // rd.date -> registration_date (string)
+  registration_date: string; // Fecha de Registro / Apertura
+  
+  // NOTA: El campo 'estado' no viene del backend. Lo definiremos estáticamente 
+  // o lo calcularemos si es necesario, pero lo quitamos si no se usa.
 }
+
 // Props para el componente TablaCursos
 interface TablaCursosProps {
   data: Programa[];
@@ -24,27 +32,30 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ data }) => {
     );
   }
 
-  // Renderizado de la tabla
   return (
     <div className="overflow-x-auto mt-6">
       <table className="min-w-full border border-gray-300 rounded-lg shadow-md">
         <thead className="bg-gray-200">
           <tr>
-            <th className="px-4 py-2 border text-left">Código</th>
-            <th className="px-4 py-2 border text-left">Nombre</th>
-            <th className="px-4 py-2 border text-left">Estado</th>
-            <th className="px-4 py-2 border text-left">Fecha de apertura</th>
-            <th className="px-4 py-2 border text-left">Fecha de cierre</th>
+            {/* 🚨 Actualizamos los encabezados para coincidir con la data */}
+            <th className="px-4 py-2 border text-left">ID (Código)</th>
+            <th className="px-4 py-2 border text-left">Nombre del Curso</th>
+            <th className="px-4 py-2 border text-left">Fecha de Registro</th>
+            <th className="px-4 py-2 border text-left">Fecha de Actividad</th>
+            {/* Si el estado no viene del backend, puedes quitar esta columna */}
+            <th className="px-4 py-2 border text-left">Estado</th> 
           </tr>
         </thead>
         <tbody>
           {data.map((programa, index) => (
             <tr key={index} className="hover:bg-gray-50">
-              <td className="px-4 py-2 border">{programa.codigo}</td>
-              <td className="px-4 py-2 border">{programa.nombre}</td>
-              <td className="px-4 py-2 border">{programa.estado}</td>
-              <td className="px-4 py-2 border">{programa.fecha_apertura}</td>
-              <td className="px-4 py-2 border">{programa.fecha_cierre}</td>
+              {/* 🚨 Usamos los nombres de propiedades del JSON de Go */}
+              <td className="px-4 py-2 border">{programa.id}</td>
+              <td className="px-4 py-2 border">{programa.name}</td>
+              <td className="px-4 py-2 border">{programa.registration_date}</td>
+              <td className="px-4 py-2 border">{programa.active_date}</td>
+              {/* Rellena con un valor estático si el backend no lo provee */}
+              <td className="px-4 py-2 border">Activo</td> 
             </tr>
           ))}
         </tbody>
