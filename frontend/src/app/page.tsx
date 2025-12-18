@@ -6,9 +6,10 @@ export default function Home() {
     <div className="p-6">
       <h1 className="mt-8 text-2xl font-medium text-gray-900">Inicio</h1>
       <div className="items-center  bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
+
+        {/* Enlace para cursos activos */}
         <Link
-          href=""
-          target="_blank"
+          href="/cursos_activos"
           className="inline-flex items-center font-semibold text-indigo-700"
         >
           <div>
@@ -54,8 +55,9 @@ export default function Home() {
           </div>
         </Link>
 
+        {/* Enlace para seguiemiento de cursos */}
         <Link
-          href=""
+          href="/seguimiento_cursos"
           className="inline-flex items-center font-semibold text-indigo-700"
         >
           <div>
@@ -73,7 +75,7 @@ export default function Home() {
                 />
               </svg>
               <h2 className="ms-3 text-xl font-semibold text-gray-900">
-                Selección cursos de seguimiento
+                Selección seguimiento de cursos
               </h2>
             </div>
 
@@ -100,8 +102,9 @@ export default function Home() {
           </div>
         </Link>
 
+        {/* Enlace para curso de distribución */}
         <Link
-          href=""
+          href="/lista_distribucion"
           className="inline-flex items-center font-semibold text-indigo-700"
         >
           <div>
@@ -146,8 +149,9 @@ export default function Home() {
           </div>
         </Link>
 
+        {/* Información de interes betowa */}
         <Link
-          href=""
+          href="/informacion_betowa"
           className="inline-flex items-center font-semibold text-indigo-700"
         >
           <div>
