@@ -18,7 +18,6 @@ export async function getTechnologicalRed(idUser) {
 
 // Guarda la selección tecnológica del usuario
 export async function SaveTechnologicalSelectionHandler(userId, redIds) {
-  console.log("Guardando selección tecnológica para el usuario:", userId, "con redes:", redIds);
   const res = await fetch("http://localhost:8080/guardar-seleccion", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -34,9 +33,9 @@ export async function SaveTechnologicalSelectionHandler(userId, redIds) {
 }
 
 // Obtiene los cursos recomendados
-export async function getRecommendedCourses(userId) {
+export async function getRecommendedCourses(idUser) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/index_cursos?user_id=${userId}`
+    `${process.env.NEXT_PUBLIC_API_URL}/api/denomination-cursos?id_user=${idUser}`
   );
 
   if (!res.ok) throw new Error("Error obteniendo cursos recomendados");

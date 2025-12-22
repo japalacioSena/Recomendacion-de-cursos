@@ -18,12 +18,6 @@ func Connect() *sql.DB {
 	dbPassword := getEnv("DB_PASSWORD", "recomendaciones_postgres_589")
 	dbName := getEnv("DB_NAME", "recomendaciones_user_postgres")
 
-	fmt.Println("🔧 Database configuration:")
-	fmt.Printf("  Host: %s\n", dbHost)
-	fmt.Printf("  Port: %s\n", dbPort)
-	fmt.Printf("  User: %s\n", dbUser)
-	fmt.Printf("  DB:   %s\n", dbName)
-
 	connStr := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		dbHost, dbPort, dbUser, dbPassword, dbName,

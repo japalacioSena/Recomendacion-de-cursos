@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import TablaCursos, { Programa } from "./TablaCursos";
+import { getUser } from "@/utils/api";
 
 const FilterCursosActivos: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState("codigo");
@@ -10,31 +11,31 @@ const FilterCursosActivos: React.FC = () => {
 
   // Datos simulados (en el futuro vendrán de tu backend en Go)
   useEffect(() => {
-    const mockData: Programa[] = [
-      {
-        codigo: "001",
-        nombre: "Matemáticas Aplicadas",
-        estado: "Activo",
-        fecha_apertura: "10/01/2024",
-        fecha_cierre: "10/01/2025",
-      },
-      {
-        codigo: "002",
-        nombre: "Física Experimental",
-        estado: "Inactivo",
-        fecha_apertura: "05/03/2023",
-        fecha_cierre: "05/03/2024",
-      },
-      {
-        codigo: "003",
-        nombre: "Programación Avanzada",
-        estado: "Activo",
-        fecha_apertura: "01/06/2024",
-        fecha_cierre: "01/06/2025",
-      },
-    ];
-    setData(mockData);
-    setFilteredData(mockData);
+    const loadCursos = async () => {
+      try {
+        // 1️⃣ Obtener usuario
+        const usuario = await getUser();
+
+        // 2️⃣ Llamar backend pasando el id_user
+        const res = await fetch(
+          `http://localhost:8080/api/denomination-cursos?id_user=${usuario.id}`,
+          { credentials: "include" }
+        );
+
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(text);
+        }
+
+        const data = await res.json();
+        setData(data);
+        setFilteredData(data);
+      } catch (err: any) {
+        console.error("❌ Error backend:", err.message);
+      }
+    };
+
+    loadCursos(); // 👈 ejecutar función async
   }, []);
 
   // Filtrar automáticamente cuando cambia el valor
@@ -83,11 +84,10 @@ const FilterCursosActivos: React.FC = () => {
           onChange={handleSelectChange}
           className="border rounded-lg p-2 h-11 w-full md:w-1/2 focus:ring focus:ring-blue-300 appearance-none"
         >
-          <option value="codigo">Código del programa</option>
-          <option value="nombre">Nombre del programa</option>
-          <option value="estado">Estado del programa</option>
-          <option value="fecha_apertura">Fecha de apertura</option>
-          <option value="fecha_cierre">Fecha de cierre</option>
+          <option value="id">Código del curso</option>
+          <option value="name">Nombre del curso</option>
+          <option value="registration_date">Fecha de registro</option>
+          <option value="active_date">Fecha de actividad</option>
         </select>
 
         {/* Campo dinámico */}

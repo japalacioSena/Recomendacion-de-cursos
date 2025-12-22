@@ -8,7 +8,6 @@ import (
 
 // insertCursoBetowa inserta un curso con sus relaciones asegurando las foreign keys.
 func insertCursoBetowa(ctx context.Context, db *sql.DB, c Curso) error {
-	fmt.Printf("🧩 PrfDuracionMaxima = %v \n", db)
 	// Helper inline para reducir repetición
 	get := func(table, column string, value interface{}) (int, error) {
 		id, err := GetOrCreateID(ctx, db, table, column, value)
@@ -34,7 +33,6 @@ func insertCursoBetowa(ctx context.Context, db *sql.DB, c Curso) error {
 		return err
 	}
 
-	fmt.Printf("🧩 PrfDuracionMaxima = %v (tipo=%T)\n", c.PrfDuracionMaxima, c.PrfDuracionMaxima)
 	idMaxDuration, err := get("maximum_duration", "duration", c.PrfDuracionMaxima)
 	if err != nil {
 		return err
@@ -141,6 +139,5 @@ func insertCursoBetowa(ctx context.Context, db *sql.DB, c Curso) error {
 		return fmt.Errorf("❌ error insertando curso %v: %v", c.PrfCodigo, err)
 	}
 
-	fmt.Printf("✅ Curso %v insertado correctamente\n", c.PrfCodigo)
 	return nil
 }

@@ -3,18 +3,10 @@ import React from "react";
 
 // La estructura de la data que recibes del backend de Go
 export interface Programa {
-  // Ahora corresponde a los campos JSON del backend de Go:
-  // co.course_code -> ID (int)
-  id: number; 
-  // de.name -> name (string)
+  id: number;
   name: string;
-  // ad.date -> active_date (string)
-  active_date: string;       // Fecha de Actividad / Cierre
-  // rd.date -> registration_date (string)
-  registration_date: string; // Fecha de Registro / Apertura
-  
-  // NOTA: El campo 'estado' no viene del backend. Lo definiremos estáticamente 
-  // o lo calcularemos si es necesario, pero lo quitamos si no se usa.
+  registration_date: string;
+  active_date: string;
 }
 
 // Props para el componente TablaCursos

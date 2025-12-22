@@ -24,6 +24,5 @@ func ImportCursos(localDB *sql.DB) error {
 		}
 	}
 
-	fmt.Printf("✅ Se importaron %d cursos correctamente\n", len(cursos))
 	return nil
 }

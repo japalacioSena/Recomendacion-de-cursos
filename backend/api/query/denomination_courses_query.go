@@ -34,15 +34,15 @@ func GetDenominationCursosHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Consulta: Se eliminó GROUP BY y se agregó un CAST para simplificar la vida.
+	// query para consultar los cursos que tiene relación con los cursos de seguimiento seleccionados
 	query := `
-        select c.course_code, d.name, rd.date, ad.date from denomination d join cursos c on c.id_denomination = d.id
-	join registration_date rd on c.id_registration_date = rd.id 
-	join active_date ad on c.id_active_date = ad.id 
-	where c.id_technological_red IN(
-	select ct.id_technological_red  from course_tracking ct
-	where ct.id_user = $1)
-        ORDER BY de.name
+			select c.course_code As Id, d.name, rd.date, ad.date from denomination d join cursos c on c.id_denomination = d.id
+		join registration_date rd on c.id_registration_date = rd.id 
+		join active_date ad on c.id_active_date = ad.id 
+		where c.id_technological_red IN(
+		select ct.id_technological_red  from course_tracking ct
+		where ct.id_user = $1)
+			ORDER BY d.name
     `
 
 	rows, err := connection.Query(query, idUser)
@@ -50,6 +50,7 @@ func GetDenominationCursosHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprintf("Error ejecutando la consulta: %v", err), http.StatusInternalServerError)
 		return
 	}
+
 	defer rows.Close()
 
 	var cursos []DenominationCursosResponse

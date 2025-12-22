@@ -32,7 +32,7 @@ func main() {
 	http.HandleFunc("/guardar-seleccion", utils.EnableCORS(savecursos.SaveTechnologicalSelectionHandler))
 
 	// Endpoint para consultar cursos con CORS habilitado
-	http.HandleFunc("/api/index_cursos", utils.EnableCORS(query.GetDenominationCursosHandler))
+	http.HandleFunc("/api/denomination-cursos", utils.EnableCORS(query.GetDenominationCursosHandler))
 
 	fmt.Println("🚀 Servidor corriendo en puerto 8080")
 	go func() {
@@ -44,7 +44,7 @@ func main() {
 	}
 
 	// Tareas programadas
-	ticker := time.NewTicker(1 * time.Minute)
+	ticker := time.NewTicker(1 * time.Hour)
 	defer ticker.Stop()
 
 	for {

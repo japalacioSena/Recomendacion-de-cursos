@@ -7,7 +7,6 @@ import (
 )
 
 func ImportUsers(localDB *sql.DB) error {
-	fmt.Println("📥 Importando usuarios desde base externa...")
 
 	userZajuna, err := GetUserZajuna()
 	if err != nil {
@@ -24,6 +23,5 @@ func ImportUsers(localDB *sql.DB) error {
 		}
 	}
 
-	fmt.Printf("✅ Se importaron %d usuarios correctamente\n", len(userZajuna))
 	return nil
 }

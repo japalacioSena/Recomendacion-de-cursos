@@ -8,7 +8,6 @@ import (
 
 // insertUsuarioZajuna inserta un usuarios con sus relaciones asegurando las foreign keys.
 func insertUserZajuna(ctx context.Context, db *sql.DB, u UserZajuna) error {
-	fmt.Printf("🧩 PrfDuracionMaxima = %v \n", db)
 
 	// Insertar los datos de los usuarios
 	_, err := db.ExecContext(ctx, `
@@ -24,7 +23,6 @@ func insertUserZajuna(ctx context.Context, db *sql.DB, u UserZajuna) error {
 		return fmt.Errorf("❌ error insertando usuario %v: %v", u.Username, err)
 	}
 
-	fmt.Printf("✅ Usuario %v insertado/actualizado correctamente\n", u.Username)
 	return nil
 
 }
